@@ -1,0 +1,124 @@
+/*
+@property CSS 是 CSS Houdini api 的一部分，
+它允许开发人员显式定义 CSS 自定义属性，
+允许属性类型检查，
+设置默认值，并定义属性是否可以继承值。
+该规则直接在样式表中表示自定义属性的注册，
+无需运行任何 JS。
+有效的规则会生成一个已注册的自定义属性，
+就好像使用等效的 parameters.@property 调用了 CSS.registerProperty 一样
+
+一个有效的规则表示自定义属性注册，
+属性名称是规则的 prelude.@property 中的序列化。
+
+@property 规则需要语法（syntax）和继承描述符（inheritsdescriptor），
+如果缺少其中一个，
+则整个规则无效，
+必须忽略。
+只有在语法是通用语法定义的情况下，
+初始值描述符才是可选的，
+否则就需要描述符，
+如果缺少初始值描述符，
+则整个规则无效，
+必须忽略它。
+
+Houdini 是一组底层 api，
+它公开了 CSS 引擎的部分内容，
+使开发人员能够通过钩入浏览器渲染引擎的样式和布局过程来扩展 CSS。
+Houdini 可以让开发者直接访问 CSS 对象模型(CSSOM) ，
+使开发者能够编写浏览器可以解析为 CSS 的代码，
+从而创建新的 CSS 特性，
+而无需等待这些特性在浏览器中实现。
+
+syntax：语法
+@property 声明一个自定义属性
+inherits：是否允许继承
+initial-value：初始值
+*/
+@property --rotate {
+  syntax: '<angle>';
+  initial-value: 132deg;
+  inherits: false;
+}
+
+:root {
+  --card-height: 65vh;
+  --card-width: calc(var(--card-height) / 1.5);
+}
+
+body {
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  min-height: 100vh;
+  background: #212534;
+  padding: 2rem 0;
+  box-sizing: border-box;
+}
+
+.card {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: var(--card-width);
+  height: var(--card-height);
+  background: #191c29;
+  padding: 3px;
+  position: relative;
+  border-radius: 6px;
+  text-align: center;
+  font-size: 1.5em;
+  color: rgb(88 199 250 / 0%);
+  cursor: pointer;
+  font-family: cursive;
+}
+
+.card:hover {
+  color: rgb(88 199 250 / 100%);
+  transition: color 1s;
+}
+
+.card:hover:before, .card:hover:after {
+  animation: none;
+  opacity: 0;
+}
+
+.card::before {
+  content: '';
+  width: 104%;
+  height: 102%;
+  border-radius: 8px;
+  background-image: linear-gradient(var(--rotate), #5ddcff, #3c67e3 43%, #4e00c2);
+  position: absolute;
+  z-index: -1;
+  top: -1%;
+  left: -2%;
+  animation: spin 2.5s linear infinite;
+}
+
+.card::after {
+  content: '';
+  position: absolute;
+  top: calc(var(--card-height) / 6);
+  left: 0;
+  right: 0;
+  z-index: -1;
+  height: 100%;
+  width: 100%;
+  margin: 0 auto;
+  transform: scale(0.8);
+  filter: blur(calc(var(--card-height) / 6));
+  background-image: linear-gradient(var(--rotate), #5ddcff, #3c67e3 43%, #4e00c2);
+  opacity: 1;
+  transition: opacity .5s;
+  animation: spin 2.5s linear infinite;
+}
+
+@keyframes spin {
+  0% {
+    --rotate: 0deg;
+  }
+  100% {
+    --rotate: 360deg;
+  }
+}
