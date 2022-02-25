@@ -10,13 +10,13 @@ class App extends React.Component {
     document.documentElement.style.setProperty('--scale', 1.6)
     document.documentElement.style.setProperty('--x', x / 2 + 'px')
     document.documentElement.style.setProperty('--y', y / 2 + 'px')
-  };
+  }
 
   handleMouseLeave = () => {
     document.documentElement.style.setProperty('--scale', 1)
     document.documentElement.style.setProperty('--x', 0)
     document.documentElement.style.setProperty('--y', 0)
-  };
+  }
   render() {
     return (
       <div
@@ -26,7 +26,7 @@ class App extends React.Component {
       >
         <img id='image' />
       </div>
-    );
+    )
   }
 }
 
